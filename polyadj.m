@@ -38,8 +38,6 @@
 
 function [padj, padjstruc, t] = polyadj(x,fx, varargin)
 
-nargin
-
 #########
 # Control error part
 #########
