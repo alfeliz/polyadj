@@ -25,8 +25,9 @@
 ## "max_order", max_order; and maximum order of polynomia.
 ## By default, @var{ord}=1 and @var{max_order} = 10.
 ##
-## @code{[padj, padjstruc, t] = polyadj (@var{x},@var{fx}, @var{order}, @var{max_order}))} returns 
-## polynomium in @var{padj}, structure in @var{padjstruc} and t value in @var{t}.
+## @code{[padj, padjstruc, st_er, t] = polyadj (@var{x},@var{fx}, @var{order}, @var{max_order}))} returns 
+## polynomium in @var{padj}, structure in @var{padjstruc}, standard errors of polynomium values in 
+## @var{st_er} and t value in @var{t}.
 ## @end deftypefn
 
 ## Author: Gonzalo Rodríguez Prieto (gonzalo.rprietoATuclm.es)
@@ -36,7 +37,7 @@
 
 
 
-function [padj, padjstruc, t] = polyadj(x,fx, varargin)
+function [padj, padjstruc, st_er, t] = polyadj(x,fx, varargin)
 
 #########
 # Control error part
@@ -108,7 +109,7 @@ while ( (n<max_order) && (t_tot>0) ) %n is polynomial order.
 	d = diag(d)'; %ROW vector of the diagonal elements.
 	MSE = (padjstruc.normr^2)/ padjstruc.df; %Variance of the residuals.
 	st_er = sqrt(MSE*d); %Standard errors
-	t = padj./st_er; %Observed t-values. The bigger, the better.
+	t = abs(padj)./st_er; %Observed t-values. The bigger, the better.
 	t_tot = sum(t);
 	t_vector = [t_vector,t_tot];
 	n = n +1;
@@ -125,7 +126,7 @@ d = ( R' * R)\eye(pos); %The covariance matrix
 d = diag(d)'; %ROW vector of the diagonal elements.
 MSE = (padjstruc.normr^2)/ padjstruc.df; %Variance of the residuals.
 st_er = sqrt(MSE*d); %Standard errors
-t = padj./st_er; %Observed t-value. The bigger, the better.
+t = abs(padj)./st_er; %Observed t-value. The bigger, the better.
 
 endfunction;
 
